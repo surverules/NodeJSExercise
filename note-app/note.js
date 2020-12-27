@@ -1,11 +1,11 @@
 const fs  = require('fs')
 const chalk  = require('chalk')
 
-const data = function() {
+const data = () =>  {
     return "Hello from Notes"
 }
 
-const addNotes = function(title, body) {
+const addNotes = (title, body) => {
 
     const lines = readAllNotes();
         const existing = lines.filter(note => note.title === title)
@@ -22,7 +22,7 @@ const addNotes = function(title, body) {
 }
 
 
-const removeNote = function(title){
+const removeNote = (title) => {
 
     const data = readAllNotes();
     const filterdata = data.filter(line => line.title !== title)
@@ -35,12 +35,23 @@ const removeNote = function(title){
     }
 }
 
-const saveNotes = function(notes){ 
-    fs.writeFileSync("notes.json", JSON.stringify(notes))
+
+const getBody = (title) => {
+    const allNotes = readAllNotes()
+    const data = allNotes.filter(note => note.title === title)
+
+    if (data.length > 0) {
+        console.log(chalk.green.inverse("Title found in notes"))
+        console.log(data)
+    } else {
+        console.log(chalk.red.inverse("title not found in notes"))
+    }
 }
 
 
-const readAllNotes = function( ){
+const saveNotes = (notes) => fs.writeFileSync("notes.json", JSON.stringify(notes))
+
+const readAllNotes = () => {
     try {
         const allNotes =  fs.readFileSync('notes.json')
         return JSON.parse(allNotes)
@@ -52,4 +63,4 @@ const readAllNotes = function( ){
 }
 
 
-module.exports = {addNotes, removeNote};
+module.exports = {addNotes, removeNote, readAllNotes, getBody};
